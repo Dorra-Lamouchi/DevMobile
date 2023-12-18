@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if messages %}
+    <div class="alert-messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.userprofile.nom }}</td>
+            <td>{{ user.userprofile.prenom }}</td>
+            <td>
+                <a href="{% url 'delete-user' user.id %}" class="btn btn-danger btn-sm">Supprimer</a>
+                <a href="{% url 'toggle-user' user.id %}" class="btn btn-secondary btn-sm">
+                    {% if user.is_active %}Désactiver{% else %}Activer{% endif %}
+                </a>
+                <a href="{% url 'reset-password' user.id %}" class="btn btn-warning btn-sm">Réinitialiser le MDP</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

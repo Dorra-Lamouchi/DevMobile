@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Statistiques des Utilisateurs</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Total des Collectes</th>
+            <th>Labels Distincts</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user_stat in users_stats %}
+        <tr>
+            <td>{{ user_stat.user__userprofile__nom }}</td>
+            <td>{{ user_stat.user__userprofile__prenom }}</td>
+            <td>{{ user_stat.total_collectes }}</td>
+            <td>{{ user_stat.total_labels_distincts }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
