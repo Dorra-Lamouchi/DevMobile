@@ -14,14 +14,9 @@ class UserSerializer(serializers.ModelSerializer):
             email=validated_data['email'], 
             password=validated_data['password']
         )
-    
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        ret.pop('password', None)
-        return ret
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = UserSerializer()
 
     class Meta:
         model = UserProfile
@@ -32,6 +27,18 @@ class UserProfileSerializer(serializers.ModelSerializer):
         user = UserSerializer.create(UserSerializer(), validated_data=user_data)
         user_profile = UserProfile.objects.create(user=user, **validated_data)
         return user_profile
+    
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', None)
+        if user_data:
+            user = instance.user
+            UserSerializer().update(user, user_data)
+        instance.nom = validated_data.get('nom', instance.nom)
+        instance.prenom = validated_data.get('prenom', instance.prenom)
+        instance.taille = validated_data.get('taille', instance.taille)
+        instance.poids = validated_data.get('poids', instance.poids)
+        instance.save()
+        return instance
     
 
 class LoginSerializer(serializers.Serializer):
